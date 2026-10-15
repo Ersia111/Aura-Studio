@@ -95,3 +95,22 @@ h1 em,
 h2 em {
   color: #8E5653;
 }
+
+/* AURA - SERVICES CHAMPAGNE TEXT */
+
+.services .service-list details > div {
+  color: #EEE8DD !important;
+}
+
+.services .service-list details > div a {
+  color: #EEE8DD !important;
+  border-bottom: 1px solid #C3B098;
+}
+
+.services .service-list details > div span {
+  color: #C3B098 !important;
+}
+
+.services .service-list summary {
+  color: #EEE8DD;
+}
