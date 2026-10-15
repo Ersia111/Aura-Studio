@@ -1,0 +1,14 @@
+FORM SETUP (Vercel + Resend)
+
+1. Deploy this folder to Vercel. The /api/lead endpoint requires a serverless-capable host. GitHub Pages alone cannot run it.
+2. Create a Resend account, verify a sender domain, and generate an API key.
+3. In Vercel project settings > Environment Variables add:
+   RESEND_API_KEY = your private Resend API key
+   LEAD_TO_EMAIL = your private receiving email address
+   LEAD_FROM_EMAIL = AURA <leads@your-verified-domain.com>
+4. Redeploy after saving environment variables.
+5. Test both forms and confirm receipt.
+
+Do not put the private receiving email address or API key into HTML, JS, or GitHub.
+The form is not live until the serverless endpoint and sender are configured.
+Before public launch, add rate limiting/CAPTCHA and a privacy notice.

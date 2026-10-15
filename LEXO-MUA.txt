@@ -1,0 +1,33 @@
+AURA STUDIO · WEBSITE I PLOTË
+
+SI TA HAPËSH
+1. Nxirre gjithë folderin nga ZIP (Extract All).
+2. Hape index.html me Chrome, Edge ose Firefox.
+3. Mbaji app.js, style.css dhe folderin assets pranë index.html.
+
+Animacioni 3D, portofoli dhe konfiguruesi punojnë nga skedarët lokalë.
+Nuk nevojiten instalime, framework ose internet për pamjen e faqes.
+Lidhjet e Instagram kërkojnë internet. Kopjimi në clipboard mund të mos
+lejohet nga shfletuesi kur faqja hapet si skedar lokal; përdor shkarkimin.
+
+PËR EDITIM
+index.html: tekstet dhe struktura.
+style.css: ngjyrat, tipografia, layout dhe animacionet CSS.
+app.js: çmimet, konfiguruesi, portofoli dhe skulptura 3D në canvas.
+assets/: logoja dhe fotografitë e portofolit.
+
+PËR SERVER LOKAL (OPSIONALE)
+Me Python të instaluar, hap terminalin në këtë folder dhe shkruaj:
+python -m http.server 8000
+Pastaj hap http://localhost:8000
+Ose përdor Live Server në Visual Studio Code.
+
+PËR HOSTIM
+Ngarko përmbajtjen e këtij folderi në një hosting statik.
+index.html duhet të jetë në direktorinë kryesore të faqes.
+
+SHËNIME
+Kontaktet e AURA nuk janë lidhur ende për dërgim automatik të kërkesave.
+Kjo është kopja e kodit të versionit të publikuar, me të njëjtat asete.
+Pamja mund të ndryshojë pak sipas madhësisë së ekranit dhe shfletuesit.
+Nëse ke aktivizuar Reduce Motion, animacionet paraqiten statike.

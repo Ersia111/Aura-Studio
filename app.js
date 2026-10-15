@@ -1,0 +1,28 @@
+const projects={kles:{title:'KLES Event',description:'Menaxhim Instagram, katalog 48 faqesh me punët më të mira dhe design për evente, nga welcome signs te kompozimi i skenës.',images:['catalogue','details','scene'],account:'kles_event'},illyrian:{title:'Illyrian Realty',description:'Menaxhim total i rrjeteve sociale dhe një identitet vizual që i jep pronave një prezantim të dallueshëm. Materiale të përzgjedhura nga prania digjitale e brandit.',images:['illyrian-web','illyrian-social'],account:'illyrian.realty'},event:{title:'The art of an entrance',description:'Design i personalizuar për KLES Event: plani i uljes, detajet e tavolinës dhe elementet që krijojnë atmosferën e eventit.',images:['scene','details'],account:'kles_event'}};const dialog=document.querySelector('dialog');document.querySelectorAll('[data-project]').forEach(b=>b.onclick=()=>{const p=projects[b.dataset.project];document.querySelector('#project-body').innerHTML=`<p class="eyebrow">AURA / SELECTED WORK</p><h2>${p.title}</h2><p>${p.description}</p><a href="https://www.instagram.com/${p.account}/" target="_blank" rel="noopener">Shiko brandin në Instagram ↗</a><div class="dialog-images">${p.images.map(i=>`<img src="assets/${i}.webp" alt="${p.title}, material portofoli">`).join('')}</div>`;dialog.showModal()});document.querySelector('.dialog-close').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;if(!reduced&&'IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.section h2,.project,.process-grid article').forEach(el=>{el.classList.add('reveal');observer.observe(el)})}
+// A projected 3D sculpture built from toroidal surfaces, with perspective and lighting.
+const canvas=document.querySelector('#sculpture'),ctx=canvas.getContext('2d');let w=0,h=0,dpr=1,mouseX=0,mouseY=0,frame=0,visible=true;function resize(){w=canvas.clientWidth;h=canvas.clientHeight;dpr=Math.min(devicePixelRatio||1,2);canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}resize();window.addEventListener('resize',resize);canvas.parentElement.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();mouseX=(e.clientX-r.left)/w-.5;mouseY=(e.clientY-r.top)/h-.5});document.addEventListener('visibilitychange',()=>visible=!document.hidden);new IntersectionObserver(es=>visible=es[0].isIntersecting).observe(canvas);
+function rotate(x,y,z,ax,ay,az){let c=Math.cos(ax),s=Math.sin(ax);[y,z]=[y*c-z*s,y*s+z*c];c=Math.cos(ay);s=Math.sin(ay);[x,z]=[x*c+z*s,-x*s+z*c];c=Math.cos(az);s=Math.sin(az);return [x*c-y*s,x*s+y*c,z]}
+function draw(t){ctx.clearRect(0,0,w,h);const mobile=w<620,cx=w*(mobile?.76:.73),cy=h*(mobile?.62:.46),scale=Math.min(w*(mobile?.64:.28),h*.39),time=reduced?0:t*.00016;const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,scale*1.7);glow.addColorStop(0,'rgba(166,79,64,.20)');glow.addColorStop(1,'rgba(55,9,13,0)');ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);const points=[];for(let ring=0;ring<3;ring++){const ax=.65+mouseY*.4+ring*.8,ay=time+mouseX*.4+ring*.7,az=-.4+ring*.55;for(let i=0;i<160;i++){const u=i/160*Math.PI*2;for(let j=0;j<15;j++){const v=j/15*Math.PI*2,R=.76,rr=.11;let [x,y,z]=rotate((R+rr*Math.cos(v))*Math.cos(u),(R+rr*Math.cos(v))*Math.sin(u),rr*Math.sin(v),ax,ay,az);const depth=3/(3+z),light=(Math.cos(v+u*.5+ring)+1)/2;points.push({x:cx+x*scale*depth,y:cy+y*scale*depth,z,light,depth})}}}points.sort((a,b)=>b.z-a.z);for(const p of points){const shade=.45+p.light*.55;ctx.fillStyle=`rgba(${Math.round(209*shade)},${Math.round(176*shade)},${Math.round(143*shade)},${mobile?.7:.93})`;ctx.beginPath();ctx.arc(p.x,p.y,Math.max(1,scale*.007*p.depth),0,Math.PI*2);ctx.fill()}ctx.strokeStyle='rgba(195,176,152,.15)';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(cx,cy,scale*1.25,scale*.37,-.35,0,Math.PI*2);ctx.stroke();}function animate(t){if(visible&&frame++%2===0)draw(t);if(!reduced)requestAnimationFrame(animate)}if(reduced)draw(0);else requestAnimationFrame(animate);
+// Forms submit to a server-side endpoint; the private recipient never appears in frontend files.
+function connectForm(formId,statusId,type){
+ const form=document.getElementById(formId), status=document.getElementById(statusId);
+ if(!form||!status)return;
+ status.textContent='';
+ form.addEventListener('submit',async e=>{
+  e.preventDefault(); if(!form.reportValidity())return;
+  const button=form.querySelector('button[type="submit"]');
+  const fields=Object.fromEntries(new FormData(form).entries());
+  if(!fields.consent && type==='brand'){status.textContent='Ju lutem pranoni kushtet e kontaktit.';return;}
+  button.disabled=true;status.textContent='Po dërgohet kërkesa...';
+  try{
+   const res=await fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,fields})});
+   const data=await res.json().catch(()=>({}));
+   if(!res.ok)throw Error(data.error||'Dërgimi nuk u realizua.');
+   status.textContent='Faleminderit! Kërkesa u dërgua me sukses. Do t’ju kontaktojmë së shpejti.';form.reset();
+  }catch(err){status.textContent='Kërkesa nuk u dërgua. Ju lutem provoni përsëri më vonë.';}
+  finally{button.disabled=false;}
+ });
+}
+connectForm('brand-form','brand-status','brand');
+connectForm('consult-form','consult-status','consultation');
