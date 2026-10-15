@@ -114,3 +114,16 @@ h2 em {
 .services .service-list summary {
   color: #EEE8DD;
 }
+
+/* AURA - CHAMPAGNE TEXT */
+
+.services .section-head p {
+  color: #EEE8DD !important;
+}
+
+/* AURA - 3D ELEMENT SIZE */
+
+#sculpture {
+  transform: scale(0.8);
+  transform-origin: center center;
+}
